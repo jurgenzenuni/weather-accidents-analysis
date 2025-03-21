@@ -18,11 +18,10 @@ Data Analysis:
 Both datasets were merged based on the corresponding months to compare the changes in weather conditions with accident occurrences.
 
 Visualizations:
+![dashboardss](https://github.com/user-attachments/assets/512b9f92-619c-4fb4-b347-dc5e2f43de73)
 ![totalsbyear](https://github.com/user-attachments/assets/b461c2ca-b122-436a-b37e-07844c0238cc)
 ![monthlyaccsbyweather](https://github.com/user-attachments/assets/42c71d7e-0b74-426d-878a-60f2212676ab)
 ![heatmap](https://github.com/user-attachments/assets/154da33d-5d73-428d-b188-c77f09bdb00d)
-![dashboardss](https://github.com/user-attachments/assets/512b9f92-619c-4fb4-b347-dc5e2f43de73)
-
 
 Findings:
 
