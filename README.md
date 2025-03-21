@@ -2,8 +2,8 @@
 This project aims to analyze the relationship between weather conditions and traffic accidents in New York City over a period of four years (2013-2024). The goal is to identify whether specific weather conditions—such as temperature, precipitation, and other meteorological factors—have a measurable impact on the frequency and severity of traffic accidents.
 
 # Data
-[https://catalog.data.gov/dataset/motor-vehicle-collisions-crashes](https://open-meteo.com/en/docs)
-[https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95/about_data](https://opendata.cityofnewyork.us/)
+  - [https://catalog.data.gov/dataset/motor-vehicle-collisions-crashes](https://open-meteo.com/en/docs)
+  - [https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95/about_data](https://opendata.cityofnewyork.us/)
 # Key Objectives:
 
 Data Collection and Processing:
