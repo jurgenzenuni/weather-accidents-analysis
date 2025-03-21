@@ -4,11 +4,9 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 import h3  
-# from dash import Dash, html, dcc
-# import dash_bootstrap_components as dbc
 
 weather_data = pd.read_csv('data/weather-manhattan-meteo.csv', 
-                          skiprows=2,  # Skip the first two rows which might contain metadata
+                          skiprows=2,  # Skip the first two rows
                           delimiter=',',  
                           low_memory=False)  
 
@@ -19,13 +17,10 @@ collision_data = pd.read_csv('data/motor_vehicle_collisions_-_crashes_20250320.c
 original_time_col = weather_data.columns[0]
 weather_data['date'] = pd.to_datetime(weather_data.iloc[:, 0])
 
-# For collision data
 collision_data['date'] = pd.to_datetime(collision_data['CRASH DATE'])
 
-# Filter for Manhattan collisions only
 manhattan_collisions = collision_data[collision_data['BOROUGH'] == 'MANHATTAN']
 
-# Include location data in our aggregation
 manhattan_collisions_with_coords = manhattan_collisions.dropna(subset=['LATITUDE', 'LONGITUDE'])
 
 # Group Manhattan collisions by date to get daily counts and injury/fatality data
@@ -56,7 +51,6 @@ merged_df['date'] = pd.to_datetime(merged_df['date'])
 # Filter data to include only complete years (2013-2024)
 filtered_df = merged_df[(merged_df['date'] >= '2013-01-01') & (merged_df['date'] <= '2024-12-31')]
 
-# Print date range information
 print(f"Weather data date range: {weather_data['date'].min()} to {weather_data['date'].max()}")
 print(f"Manhattan collision data date range: {daily_manhattan['date'].min()} to {daily_manhattan['date'].max()}")
 print(f"Filtered data date range: {filtered_df['date'].min()} to {filtered_df['date'].max()}")
@@ -81,7 +75,6 @@ yearly_accidents = filtered_df.groupby('year').agg({
 # Create a time series line graph for yearly accidents with gradient color
 fig = go.Figure()
 
-# Define a color scale similar to the hexmap
 colors = [
     (95, 47, 143),    # Brighter dark purple (lowest)
     (130, 44, 149),   # Brighter purple
@@ -304,13 +297,13 @@ for year in years:
                 x=category_data['month'],
                 y=category_data['collision_count'],
                 mode='lines+markers',
-                name=f"{category} ({year})",  # Include year in name to make it unique
+                name=f"{category} ({year})",  
                 line=dict(color=colors.get(category, 'white'), width=4),
                 marker=dict(size=8),
-                visible=(year == 2024),  # Only 2024 visible by default
-                legendgroup=f"{category}_{year}",  # Make legend groups unique per year
+                visible=(year == 2024),  
+                legendgroup=f"{category}_{year}",  
                 hovertemplate=f"<b>{category}</b><br>Collisions: %{{y}}<br>Month: %{{x}}<extra></extra>",
-                hoverlabel=dict(bgcolor='rgba(0,0,0,0.8)', font=dict(color='white'))  # Dark hover background
+                hoverlabel=dict(bgcolor='rgba(0,0,0,0.8)', font=dict(color='white'))  
             ),
             row=1, col=1
         )
@@ -324,32 +317,29 @@ for year in years:
             go.Bar(
                 x=[category],
                 y=[row['collision_count']],
-                name=f"{category} ({year})",  # Include year in name
+                name=f"{category} ({year})",  
                 marker_color=colors.get(category, 'white'),
                 text=row['collision_count'],
                 textposition='auto',
                 textfont=dict(color='white'),
-                visible=(year == 2024),  # Only 2024 visible by default
-                legendgroup=f"{category}_{year}",  # Make legend groups unique per year
+                visible=(year == 2024),  
+                legendgroup=f"{category}_{year}",  
                 showlegend=False,
                 hovertemplate=f"<b>{category}</b><br>Total: %{{y}}<extra></extra>",
-                hoverlabel=dict(bgcolor='rgba(0,0,0,0.8)', font=dict(color='white'))  # Dark hover background
+                hoverlabel=dict(bgcolor='rgba(0,0,0,0.8)', font=dict(color='white'))  
             ),
             row=1, col=2
         )
         year_traces[year].append(trace_idx)
 
-# Now create buttons after all traces have been added
 dropdown_buttons = []
 for year in years:
-    # Create a visibility array where all traces are initially False
     visible_array = [False] * len(fig2.data)
     
-    # Only set to True the traces that belong to this specific year
     for trace_idx in year_traces[year]:
         visible_array[trace_idx] = True
     
-    # Create the button with the correct visibility array
+    # Create
     button = dict(
         method="update",
         label=str(year),
@@ -360,35 +350,33 @@ for year in years:
     )
     dropdown_buttons.append(button)
 
-# Fix the dropdown styling - remove the invalid buttondefaults property
+# dropdown styles
 fig2.update_layout(
     updatemenus=[
         dict(
-            active=years.index(2024),  # Set 2024 as the default selected year
+            active=years.index(2024),  
             buttons=dropdown_buttons,
             direction="down",
             pad={"r": 10, "t": 10},
             showactive=True,
-            x=0.25,  # Move further to the right
+            x=0.25,  
             xanchor="left",
             y=1.15,
             yanchor="top",
             bgcolor="#333333",
             font=dict(color="white"),
-            bordercolor="#666666",  # Add border color
-            borderwidth=1  # Add border width
+            bordercolor="#666666",  
+            borderwidth=1  
         )
     ]
 )
 
-# Instead, update each button individually with proper styling
 for button in dropdown_buttons:
-    # We can't set hover properties directly, but we can ensure the text is visible
     button["label"] = f"<b>{button['label']}</b>"  # Make labels bold for better visibility
 
-# Update the label position to match the new dropdown position
+# Update the label position 
 fig2.add_annotation(
-    x=0.11,  # Move to match new dropdown position (was 0.06)
+    x=0.11,  
     y=1.12,
     xref="paper",
     yref="paper",
@@ -413,7 +401,7 @@ fig2.update_layout(
     paper_bgcolor='#1e1e1e',
     plot_bgcolor='#1e1e1e',
     font=dict(color='white'),
-    margin=dict(t=120)  # Add more top margin for the dropdown
+    margin=dict(t=120)  
 )
 
 # Update x-axis with month names
@@ -442,13 +430,13 @@ fig2.update_yaxes(
     row=1, col=2
 )
 
-# Update hover label styling for all traces to ensure black text on light background
+# Update hover label 
 for i in range(len(fig2.data)):
     if hasattr(fig2.data[i], 'hoverlabel'):
         fig2.data[i].hoverlabel = dict(
-            bgcolor='rgba(255,255,255,0.9)',  # Light background
-            font=dict(color='black', size=12),  # Black text
-            bordercolor='#666666'  # Border color
+            bgcolor='rgba(255,255,255,0.9)',  
+            font=dict(color='black', size=12),  
+            bordercolor='#666666'  
         )
 
 fig2.show()
@@ -469,12 +457,12 @@ merged_df['date'] = pd.to_datetime(merged_df['date'])
 merged_with_location = pd.merge(merged_df, location_data, on='date', how='left')
 
 # Filter for initial year data directly
-initial_year = 2024  # Changed from 2023 to 2024
+initial_year = 2024  
 year_data = merged_with_location[merged_with_location['date'].dt.year == initial_year]
 print(f"Number of Manhattan collisions in {initial_year} with valid coordinates: {len(year_data)}")
 
 # Adjust the H3 resolution to create larger hexagons
-resolution = 9  # Using resolution 9 for hexagon size
+resolution = 9  
 
 # Convert lat/lon to H3 indices
 year_data['h3_index'] = year_data.apply(
@@ -501,15 +489,14 @@ fig3 = go.Figure()
 
 # Update the hexagon creation with adjustable opacity
 for idx, row in hex_counts.iterrows():
-    # Normalize the count for color scaling
+    
     min_count = hex_counts['count'].min()
     max_count = hex_counts['count'].max()
     normalized_count = (row['count'] - min_count) / (max_count - min_count) if max_count > min_count else 0.5
     
     # Calculate opacity based on normalized count
     opacity = 0.50 + (normalized_count * 0.35)
-    
-    # Get color based on normalized count
+
     color_idx = min(int(normalized_count * 10), 9)  # Ensure index is within bounds
     
     # Original color scale
@@ -547,8 +534,8 @@ for idx, row in hex_counts.iterrows():
 fig3.update_layout(
     mapbox=dict(
         style="carto-darkmatter",
-        center=dict(lat=40.7831, lon=-73.9712),  # Manhattan center
-        zoom=11  # Set to 11 as a good middle ground
+        center=dict(lat=40.7831, lon=-73.9712),  
+        zoom=11  
     ),
     margin=dict(l=0, r=0, t=70, b=0),
     paper_bgcolor='#1e1e1e',
@@ -619,7 +606,7 @@ fig3.add_annotation(
     align="left"
 )
 
-# Update legend position
+# legend position
 fig3.update_layout(
     legend=dict(
         orientation="v",
@@ -678,8 +665,7 @@ print("Hexbin map saved to 'visuals/manhattan_collision_hexbin_2024.html'")
 # ---- Create a Dashboard with All Three Visualizations ----
 
 def create_dashboard():
-    # Save the individual figures as HTML divs with full plotly.js included
-    # This ensures each visualization has its own independent Plotly instance
+
     yearly_html = fig.to_html(include_plotlyjs='cdn', full_html=False, config={'displayModeBar': False})
     weather_html = fig2.to_html(include_plotlyjs='cdn', full_html=False, config={'displayModeBar': False})
     hexmap_html = fig3.to_html(include_plotlyjs='cdn', full_html=False, config={'displayModeBar': False})
@@ -771,8 +757,7 @@ def create_dashboard():
     </body>
     </html>
     '''
-    
-    # Write the dashboard to an HTML file
+
     dashboard_path = 'visuals/manhattan_collisions_dashboard.html'
     with open(dashboard_path, 'w') as f:
         f.write(dashboard_html)
@@ -785,5 +770,4 @@ def create_dashboard():
     file_url = 'file://' + os.path.abspath(dashboard_path)
     webbrowser.open(file_url)
 
-# Create and save the dashboard
 create_dashboard()
