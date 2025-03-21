@@ -3,7 +3,7 @@ This project aims to analyze the relationship between weather conditions and tra
 
 # Data
 [https://catalog.data.gov/dataset/motor-vehicle-collisions-crashes](https://open-meteo.com/en/docs)
-https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95/about_data
+[https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95/about_data](https://opendata.cityofnewyork.us/)
 # Key Objectives:
 
 Data Collection and Processing:
